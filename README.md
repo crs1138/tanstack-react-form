@@ -1,73 +1,112 @@
-# React + TypeScript + Vite
+# TanStack React Form Tutorial
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern React form management application built with TanStack React Form, TypeScript, and Vite. This project demonstrates form validation, field management, and integration with TanStack DevTools.
 
-Currently, two official plugins are available:
+## 🚀 Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **React 19** - UI library
+- **TypeScript** - Type safety
+- **Vite** - Build tool and dev server
+- **TanStack React Form** - Form state management and validation
+- **Zod** - Schema validation (available for use)
+- **TanStack DevTools** - Development tools for debugging forms
 
-## React Compiler
+## ✨ Features
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+- **Form State Management**: Leverages TanStack React Form for efficient form state handling
+- **Field Validation**:
+  - Synchronous validation with custom validators
+  - Asynchronous validation support
+  - Real-time error display
+- **Form Fields**:
+  - Text inputs (firstName, lastName, email)
+  - Checkbox groups (hobbies)
+- **Developer Experience**:
+  - TanStack DevTools integration for form debugging
+  - TypeScript for type safety
+  - Hot Module Replacement (HMR) with Vite
 
-## Expanding the ESLint configuration
+## 📦 Installation
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+# Install dependencies
+pnpm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🛠️ Development
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+# Start development server
+pnpm dev
 ```
+
+The application will be available at `http://localhost:5173` (or the next available port).
+
+## 🏗️ Build
+
+```bash
+# Build for production
+pnpm build
+
+# Preview production build
+pnpm preview
+```
+
+## 📝 Code Quality
+
+```bash
+# Run ESLint
+pnpm lint
+
+# Format code with Prettier
+pnpm format
+```
+
+## 🎯 Project Structure
+
+```
+src/
+├── App.tsx          # Main form component
+├── App.css          # Component styles
+├── main.tsx         # Application entry point with DevTools
+└── index.css        # Global styles
+```
+
+## 🔍 Form Features
+
+### Current Implementation
+
+The form includes:
+
+- **First Name**: Required field with minimum length validation and async validation
+- **Last Name**: Required field with minimum length validation
+- **Email**: Required field with email format validation
+- **Hobbies**: Checkbox group for multiple selections
+
+### Validation Examples
+
+The project demonstrates:
+
+- **Synchronous validation**: Immediate validation on change
+- **Asynchronous validation**: Delayed validation with loading states
+- **Error display**: Shows validation errors when fields are touched
+
+## 🛠️ DevTools
+
+TanStack DevTools are integrated and can be used to:
+
+- Inspect form state
+- Debug field values
+- Monitor validation status
+- Track form submissions
+
+## 📚 Resources
+
+- [TanStack React Form Documentation](https://tanstack.com/form/latest)
+- [Zod Documentation](https://zod.dev/)
+- [Vite Documentation](https://vite.dev/)
+- [React Documentation](https://react.dev/)
+
+## 📄 License
+
+This is a tutorial project for learning purposes.
