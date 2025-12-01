@@ -1,4 +1,5 @@
 import { formOptions, useForm, type AnyFieldApi } from '@tanstack/react-form'
+import * as z from 'zod'
 import './App.css'
 
 interface User {
@@ -16,17 +17,44 @@ const defaultUser: User = {
 }
 
 function FieldInfo({ field }: { field: AnyFieldApi }) {
+  console.log({ field })
   return (
     <div>
-      {field.state.meta.isTouched && !field.state.meta.isValid ? <em>{field.state.meta.errors.join(',')}</em> : null}
+      {field.state.meta.isTouched && !field.state.meta.isValid ? (
+        <em>{field.state.meta.errors.map((err) => err.message).join(',')}</em>
+      ) : null}
       {field.state.meta.isValidating ? 'Validating...' : null}
     </div>
   )
 }
 
+const userSchema = z.object({
+  firstName: z.string().min(3),
+  lastName: z.string().min(3),
+  email: z.string().email(),
+  hobbies: z.record(z.string(), z.boolean()),
+})
+
+const userSchemaAsync = z.object({
+  firstName: z
+    .string()
+    .min(3)
+    .refine(
+      async (value) => {
+        console.log('validating first name', value)
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        return !value.includes('error')
+      },
+      { message: 'Error is not allowed in first name' },
+    ),
+})
+
 function App() {
   const formOpts = formOptions({
     defaultValues: defaultUser,
+    validators: {
+      onChange: userSchema,
+    },
   })
   const form = useForm({
     ...formOpts,
@@ -47,6 +75,16 @@ function App() {
         <div>
           <form.Field
             name="firstName"
+            validators={{
+              onChangeAsyncDebounceMs: 500,
+              onChangeAsync: z.string().refine(
+                async (value) => {
+                  await new Promise((resolve) => setTimeout(resolve, 1000))
+                  return !value.includes('error')
+                },
+                { message: 'Error is not allowed in first name' },
+              ),
+            }}
             children={(field) => (
               <>
                 <label htmlFor="firstName">
@@ -61,31 +99,11 @@ function App() {
                 <FieldInfo field={field} />
               </>
             )}
-            validators={{
-              onChange: ({ value }) =>
-                !value
-                  ? 'First name is required'
-                  : value.length < 3
-                    ? 'First name must be at least 3 characters long'
-                    : undefined,
-              onChangeAsync: async ({ value }) => {
-                await new Promise((resolve) => setTimeout(resolve, 1000))
-                return value.includes('error') && 'No "error" allowed in first name'
-              },
-            }}
           />
         </div>
         <div>
           <form.Field
             name="lastName"
-            validators={{
-              onChange: ({ value }) => {
-                if (!value) {
-                  return 'Last name is required'
-                }
-                return value.length < 3 ? 'Last name must be at least 3 characters long' : undefined
-              },
-            }}
             children={(field) => (
               <>
                 <label htmlFor="lastName">
@@ -105,10 +123,6 @@ function App() {
         <div>
           <form.Field
             name="email"
-            validators={{
-              onChange: ({ value }) =>
-                !value ? 'Email is required' : !value.includes('@') ? 'Email must contain @' : undefined,
-            }}
             children={(field) => (
               <>
                 <label htmlFor="email">
@@ -190,7 +204,7 @@ function App() {
           />
         </div>
         <form.Subscribe>
-          <button type="submit" onClick={form.handleSubmit}>
+          <button type="submit" onClick={form.handleSubmit} disabled={form.state.canSubmit}>
             {form.state.isSubmitting ? 'Submitting...' : 'Submit'}
           </button>
         </form.Subscribe>
