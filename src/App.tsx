@@ -17,6 +17,7 @@ const defaultUser: User = {
 }
 
 function FieldInfo({ field }: { field: AnyFieldApi }) {
+  console.log({ field })
   return (
     <div>
       {field.state.meta.isTouched && !field.state.meta.isValid ? (
