@@ -35,20 +35,6 @@ const userSchema = z.object({
   hobbies: z.record(z.string(), z.boolean()),
 })
 
-const userSchemaAsync = z.object({
-  firstName: z
-    .string()
-    .min(3)
-    .refine(
-      async (value) => {
-        console.log('validating first name', value)
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        return !value.includes('error')
-      },
-      { message: 'Error is not allowed in first name' },
-    ),
-})
-
 function App() {
   const formOpts = formOptions({
     defaultValues: defaultUser,
@@ -203,11 +189,13 @@ function App() {
             )}
           />
         </div>
-        <form.Subscribe>
-          <button type="submit" onClick={form.handleSubmit} disabled={form.state.canSubmit}>
-            {form.state.isSubmitting ? 'Submitting...' : 'Submit'}
-          </button>
-        </form.Subscribe>
+        <form.Subscribe
+          children={({ canSubmit, isPristine, isSubmitting }) => (
+            <button type="submit" onClick={form.handleSubmit} disabled={!canSubmit || isPristine}>
+              {isSubmitting ? 'Submitting...' : 'Submit'}
+            </button>
+          )}
+        />
       </form>
     </div>
   )
